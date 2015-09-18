@@ -5,4 +5,5 @@ Please answer the following:
 * What relationships or trends do you notice?
 * What do you think is the main takeaway from this visualization?
 * Is there something you don’t understand in the graphic?
+
 Thanks!
