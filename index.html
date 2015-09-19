@@ -48,6 +48,8 @@
 		x.title = "Number of flights";
 		x.fontSize = "12px";
 		x.logBase = 10;
+		x.overrideMin = 0.1;
+      x.overrideMax = 10000;
 		
       var y = myChart.addMeasureAxis("y", "avg_delay");
       y.title = "Average delay per flight (minutes)";
