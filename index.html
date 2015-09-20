@@ -38,8 +38,11 @@
 		.text("Source: http://www.transtats.bts.gov/OT_Delay/OT_DelayCause1.asp");
 
 // Load the data
-	d3.csv("2014_airline_delay_ct_reshaped.csv", function (data) {
-					 
+	d3.csv("/data/2014_airline_delay_ct_reshaped.csv", function (data) {
+
+// Default menu selection for delay reason
+	var reason_selection = "Carrier";
+						 
 // Draw a scatterplot with legend using dimple
       var myChart = new dimple.chart(svg, data);
       myChart.setBounds(margin.left, margin.top, chartSize.width, chartSize.height)
@@ -48,15 +51,15 @@
 		x.title = "Number of flights";
 		x.fontSize = "12px";
 		x.logBase = 10;
-		x.overrideMin = 0.1;
+      x.overrideMin = 0.1;
       x.overrideMax = 10000;
 		
-      var y = myChart.addMeasureAxis("y", "avg_delay");
+      var y = myChart.addLogAxis("y", "avg_delay");
       y.title = "Average delay per flight (minutes)";
       y.fontSize = "12px";
-//      y.logBase = 10;
+      y.logBase = 10;
       y.overrideMin = 10;
-      y.overrideMax = 200;
+      y.overrideMax = 500;
       
        // the legend will be the carrier_name, and the key column disaggregates by airport_name
       var mySeries = myChart.addSeries(["key", "carrier_name"], dimple.plot.scatter);
@@ -64,22 +67,65 @@
       var carrier_list = dimple.getUniqueValues(data, "carrier_name").sort();
 		mySeries.addOrderRule(carrier_list); // sort legend
       var myLegend = myChart.addLegend(margin.left + chartSize.width,
-      	margin.top, margin.right, chartSize.height, "Right");
+      	margin.top, margin.right, chartSize.height, "Left");
       myLegend.fontSize = "12px";
 
 		myChart.data = dimple.filterData(data, "reason", "Carrier"); // display data for carrier delay reason
 		
       myChart.draw();
 		d3.selectAll("circle").attr("r",3).attr("opacity",0.5); // change radius and opacity of points
-		debugger;
 
+// Legend title
+		svg.selectAll("title_text")
+			.data(["Click legend to","show / hide carrier:"])
+			.enter()
+			.append("text")
+				.attr("x", margin.left + chartSize.width + 15)
+				.attr("y", function (d, i) { return margin.top - 28 + i * 14; })
+				.style("font-family", "sans-serif")
+				.style("font-size", "10px")
+				.text(function (d) { return d; });
+
+// Interactive legend
+// http://dimplejs.org/advanced_examples_viewer.html?id=advanced_interactive_legends
+		myChart.legends = []; // Orphan the legend
+		myLegend.shapes.selectAll("rect")
+			.on("click", function (e) {
+				var selected_carrier = e.aggField.slice(-1)[0];			
+				var hide = false;
+				var new_carrier_list = [];
+				
+				carrier_list.forEach(function (f) { // If carrier_list contains clicked shape, hide it
+					if (f === selected_carrier) {
+						hide = true;
+					} else {
+						new_carrier_list.push(f);
+					}
+				});
+				
+				if (hide) {
+					d3.select(this).style("opacity", 0.2); // hide the shape
+				} else {
+					new_carrier_list.push(selected_carrier); // selected shape was previously hidden, now show it again
+					d3.select(this).style("opacity", 0.8); // show shape
+				}		
+
+				carrier_list = new_carrier_list; // Update the filters			
+				data_with_reason = dimple.filterData(data, "reason", reason_selection); // Must maintain filter for reason
+				myChart.data = dimple.filterData(data_with_reason, "carrier_name", carrier_list); // Filter for carrier
+
+				myChart.draw();
+				d3.selectAll("circle").attr("r",3).attr("opacity",0.5); // change radius and opacity of points
+				debugger;
+			});
+	
 //	Drop-down menu for selecting airport
-      var airport_list = dimple.getUniqueValues(data, "reason").sort(); // menu items
-      airport_list.unshift("Select reason"); // menu title
+      var reason_list = dimple.getUniqueValues(data, "reason").sort(); // menu items
+      reason_list.unshift("Select delay reason"); // menu title
 		var menu = d3.select("#menu")
 		
 		menu.selectAll("option")
-			.data(airport_list)
+			.data(reason_list)
 			.enter()
 			.append("option")
 			.text(function(d) {
@@ -89,12 +135,17 @@
 		menu.on("change", change);
 
 		function change() {
-			if (airport_list[this.selectedIndex] != "Select reason") { // do not update if select menu title
-				update(airport_list[this.selectedIndex]);
+			var old_reason_selection = reason_selection;
+			reason_selection = reason_list[this.selectedIndex];
+			if (reason_selection != "Select delay reason") { // do not update if select menu title
+				update(reason_selection);
+			};
+			if (reason_selection === "Select delay reason") {  // don't update data if select "Select delay reason"
+				reason_selection = old_reason_selection;
 			};
 		};
 
-// Update stacked bar chart
+// Update chart when new item selected from pull-down menu
 		function update(media_val) {
 			myChart.data = dimple.filterData(data, "reason", media_val); // only display data for selected airport
 
@@ -106,7 +157,6 @@
 				.style("font-size", "25px").attr("id", "heading")
 				.text("Flight Delay Due to " + media_val);
 				
-//			y.overrideMax = yscalemax; // prevent y-axis rescaling to allow comparison of airports
 			myChart.draw();
 			d3.selectAll("circle").attr("r",3).attr("opacity",0.5); // change radius and opacity of points
 		};
