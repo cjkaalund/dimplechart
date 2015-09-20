@@ -7,9 +7,9 @@
 <select id="menu"></select>
 
 <div id="chartContainer">
-	<script src="http://d3js.org/d3.v3.min.js"></script>
-	<script src="http://dimplejs.org/dist/dimple.v2.0.0.min.js"></script>
-	<script type="text/javascript">
+  <script src="d3.js"></script>
+  <script src="dimple.v2.1.6.js"></script>
+  <script type="text/javascript">
   
 // Chart size and margins
 // The margins allow space for surrounding elements such as the legend
@@ -38,7 +38,7 @@
 		.text("Source: http://www.transtats.bts.gov/OT_Delay/OT_DelayCause1.asp");
 
 // Load the data
-	d3.csv("2014_airline_delay_ct_reshaped.csv", function (data) {
+	d3.csv("/data/2014_airline_delay_ct_reshaped.csv", function (data) {
 
 // Default menu selection for delay reason
 	var reason_selection = "Carrier";
@@ -61,8 +61,8 @@
       y.overrideMin = 10;
       y.overrideMax = 500;
       
-       // the legend will be the carrier_name, and the key column disaggregates by airport_name
-      var mySeries = myChart.addSeries(["key", "carrier_name"], dimple.plot.scatter);
+       // the legend will be the carrier_name, and the airport_name column disaggregates by airport_name
+      var mySeries = myChart.addSeries(["airport_name", "carrier_name"], dimple.plot.scatter);
       
       var carrier_list = dimple.getUniqueValues(data, "carrier_name").sort();
 		mySeries.addOrderRule(carrier_list); // sort legend
