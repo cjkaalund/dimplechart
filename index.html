@@ -7,13 +7,13 @@
 <select id="menu"></select>
 
 <div id="chartContainer">
-   <script src="http://d3js.org/d3.v3.min.js"></script>
-   <script src="http://dimplejs.org/dist/dimple.v2.0.0.min.js"></script>
-   <script type="text/javascript">
+	<script src="http://d3js.org/d3.v3.min.js"></script>
+	<script src="http://dimplejs.org/dist/dimple.v2.0.0.min.js"></script>
+	<script type="text/javascript">
   
 // Chart size and margins
 // The margins allow space for surrounding elements such as the legend
-	var margin = {top: 100, right: 200, bottom: 50, left:60}
+	var margin = {top: 100, right: 200, bottom: 100, left:60}
 	var chartSize = {width: 500, height: 250}
 
 // Create chart svg
@@ -55,7 +55,7 @@
       x.overrideMax = 10000;
 		
       var y = myChart.addLogAxis("y", "avg_delay");
-      y.title = "Average delay per flight (minutes)";
+      y.title = "Arrival delay (minutes)";
       y.fontSize = "12px";
       y.logBase = 10;
       y.overrideMin = 10;
@@ -82,6 +82,19 @@
 			.append("text")
 				.attr("x", margin.left + chartSize.width + 15)
 				.attr("y", function (d, i) { return margin.top - 28 + i * 14; })
+				.style("font-family", "sans-serif")
+				.style("font-size", "10px")
+				.text(function (d) { return d; });
+
+// Add note to bottom of the chart explaining the axes
+		svg.selectAll("title_text")
+			.data(["Note:",
+			"The delay is averaged by the number of flights in the year.",
+			"The number of flights is the summed over all the months of the year."])
+			.enter()
+			.append("text")
+				.attr("x", 0)
+				.attr("y", function (d, i) { return margin.top + chartSize.height + i * 14 + 60; })
 				.style("font-family", "sans-serif")
 				.style("font-size", "10px")
 				.text(function (d) { return d; });
@@ -147,8 +160,9 @@
 
 // Update chart when new item selected from pull-down menu
 		function update(media_val) {
-			myChart.data = dimple.filterData(data, "reason", media_val); // only display data for selected airport
-
+			data_with_reason = dimple.filterData(data, "reason", media_val); // only display data for selected airport
+			myChart.data = dimple.filterData(data_with_reason, "carrier_name", carrier_list); // Filter for carrier, don't want to lose this
+			
 			d3.select("#heading").remove() // clear old chart heading
 
 			svg.append("text") // update chart heading
