@@ -46,7 +46,25 @@
 // Draw a scatterplot with legend using dimple
       var myChart = new dimple.chart(svg, data);
       myChart.setBounds(margin.left, margin.top, chartSize.width, chartSize.height)
-      
+
+		myChart.defaultColors = [ // Custom color palette based on http://flatuicolors.com/ + others
+			new dimple.color("#3498db", "#2980b9", 1), // peter river
+			new dimple.color("#e74c3c", "#c0392b", 1), // alizarin
+			new dimple.color("#2ecc71", "#27ae60", 1), // emerald
+			new dimple.color("#9b59b6", "#8e44ad", 1), // amethyst
+			new dimple.color("#e67e22", "#d35400", 1), // carrot
+			new dimple.color("#f1c40f", "#f39c12", 1), // sun flower
+			new dimple.color("#1abc9c", "#16a085", 1), // turquoise
+			new dimple.color("#116644", "#559977", 1), // green	
+			new dimple.color("#95a5a6", "#7f8c8d", 1), // concrete
+			new dimple.color("#34495e", "#2c3e50", 1), // wet asphalt
+			new dimple.color("#ffbbdd", "#ff7799", 1), // rose
+			new dimple.color("#595723", "#2E3C22", 1), // army
+			new dimple.color("#F3D885", "#F79A67", 1), // pale yellow
+			new dimple.color("#5F7CAF", "#1317DB", 1), // pale blue
+			new dimple.color("#7AC30F", "#7AB64D", 1)  // bright green
+		];
+		      
       var x = myChart.addLogAxis("x", "total_ct");
 		x.title = "Number of flights";
 		x.fontSize = "12px";
