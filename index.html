@@ -11,15 +11,20 @@
 			-ms-user-select: none;
 			user-select: none;
 		}
+		#menu_header {
+        color: blue;
+        font-style: italic;
+      }
 	</style>
 </head>
 
+<div id="menu_header">Select the delay reason from the menu below:</div id="menu_header">
 <select id="menu"></select>
 
 <div id="chartContainer">
-   <script src="http://d3js.org/d3.v3.min.js"></script>
-   <script src="http://dimplejs.org/dist/dimple.v2.0.0.min.js"></script>
-	<script type="text/javascript">
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+  <script src="http://dimplejs.org/dist/dimple.v2.0.0.min.js"></script>
+  <script type="text/javascript">
   
 // Chart size and margins
 // The margins allow space for surrounding elements such as the legend
@@ -113,19 +118,20 @@
 				.attr("y", function (d, i) { return margin.top - 42 + i * 14; })
 				.style("font-family", "sans-serif")
 				.style("font-size", "12px")
+				.style("fill","blue")
 				.text(function (d) { return d; });
 
 // Add note to bottom of the chart explaining the axes
 		svg.selectAll("title_text")
 			.data(["Note:",
-			"The arrival delay is averaged over all months of the year.",
+			"The arrival delay is averaged over all flights to a particular airport and over all months of the year.",
 			"The number of flights is the summed over all the months of the year."])
 			.enter()
 			.append("text")
 				.attr("x", 0)
-				.attr("y", function (d, i) { return margin.top + chartSize.height + i * 14 + 60; })
+				.attr("y", function (d, i) { return margin.top + chartSize.height + i * 16 + 60; })
 				.style("font-family", "sans-serif")
-				.style("font-size", "10px")
+				.style("font-size", "12px")
 				.text(function (d) { return d; });
 
 // Interactive legend
