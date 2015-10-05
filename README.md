@@ -20,15 +20,11 @@ The first reviewer of my chart pointed out that there is considerable overlap of
 The first reviewer also did not understand what ‘Average delay’ (the initial y-axis title) was, and so I changed this title to be ‘Arrival delay’ and added an explanatory note about averaging at the bottom of the chart. I also added a short explanation of the x-axis.
 
 ##Versions:
-* scatter1.html … scatter4.html – various early versions, basic charts
-* scatter4.html - works nicely, aggregating by month
-* scatter5.html – disaggregated to show every single data point, but too slow
-* scatter6.html – aggregated again, and interactive legend - doesn’t work
-* scatter7.html - interactive legend which simply shows the result for one airline - works!
-* scatter8.html – an intermediate version
-* scatter9.html – changed colour scheme of legend, added a note explaining the axes – modified after feedback from the first reviewer
-* scatter10.html - add CTRL-click, SHIFT-click to legend. Changed following discussion with the second reviewer
-* scatter11.html – final version, after receiving feedback from the third reviewer. I added text and increased the font sizes and changed text colour to highlight the interactivity of the legend and the pull-down menu
+* original_index.html - (scatter7) - uploaded and presented to first reviewer
+* index1.html - (scatter8) added a note explaining the axes – modified after feedback from the first reviewer
+* index2.html - (scatter9) changed colour scheme of legend to make airlines more easily distinguishable
+* index3.html - (scatter10) add CTRL-click, SHIFT-click to legend. Changed following discussion with the second reviewer
+* final_index.html - (scatter11) final version, after receiving feedback from the third reviewer. I added text and increased the font sizes and changed text colour to highlight the interactivity of the legend and the pull-down menu
 
 #Feedback
 ##First reviewer - Sara
